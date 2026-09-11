@@ -1,6 +1,10 @@
 # Ego Vision
 
-This project watches a driving video from a car cam (a dashcam) and decides what the car should do next: `GO`, `SLOW DOWN`, `STOP`, or `EMERGENCY BRAKE`. It draws that decision on top of the video as a live on-screen display.
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.8-orange)
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
+
+This project performs real-time driving action prediction from car dashcam video by combining YOLOv11 for object detection, ByteTrack for multi-object tracking, and Depth Anything V2 for depth estimation. Based on the detected results, the system classifies each scene into one of four driving actions: GO, SLOW DOWN, STOP, or EMERGENCY BRAKE. The predicted action is rendered as a live overlay on the video.
 
 ---
 
@@ -25,15 +29,14 @@ This project watches a driving video from a car cam (a dashcam) and decides what
 | Step | What it does | How |
 |---|---|---|
 | **Find objects** | Detect cars, people, traffic lights, and signs | YOLO11 (Ultralytics) |
-| **Read light color** | Tells red, yellow, or green apart for each traffic light | Color analysis of the light box |
-| **Track objects** | Gives each object a steady ID so it can be tracked frame to frame | ByteTrack (Ultralytics) |
+| **Read light color** | Classify red, yellow, or green color of each traffic light | Color analysis of the light box |
+| **Track objects** | Track objects | ByteTrack (Ultralytics) |
 | **Measure distance** | Works out how many meters away each object is | Depth Anything V2, a depth-from-one-camera model |
 | **Understand the scene** | Distance, closing speed, time to impact, and which light is ahead | Math on the tracked objects |
-| **Decide** | Turns all of that into one action | A short list of rules |
-| **Draw it** | Shows the boxes, IDs, distances, and the chosen action | OpenCV |
+| **Decide** | Turns all of that into one action | A list of rules |
+| **Draw** | Shows the boxes, IDs, distances, and the chosen action | OpenCV |
 
-The objects the camera can see are sorted into three groups, and each group is handled
-differently:
+The objects the camera can see are sorted into three groups, and each group is handled differently:
 
 - **Vehicles** (car, truck, bus, motorcycle, bicycle, train): used to decide whether to
   follow, slow for, or stop behind the vehicle ahead.
@@ -53,6 +56,7 @@ The rules are checked in order, and the **first one that matches wins**:
 | 4 | **GO** | The way is clear, with nothing blocking and no stop signal. |
 
 To stop the on-screen action from flickering with different actions, a new action has to repeat for n number of frames in a row before it actually changes on screen.
+
 
 You can adjust the numbers in [`ego_vision/config/settings.py`](ego_vision/config/settings.py):
 
@@ -153,15 +157,9 @@ ego_vision/
 - [ ] Improve speed estimation in the HUD. The code is in [`ego_vision/reasoning/speed.py`](ego_vision/reasoning/speed.py) and is currently disabled. It needs more accurate distance readings first.
 - [ ] Speed-limit sign detection and OCR (e.g. a small YOLO traffic-sign detector + PaddleOCR for the digits)
 
-## Limits
 
-- It is not scored. You judge the result by watching the video.
-- Reading light color can struggle at night or in glare.
-- It only knows traffic lights and stop signs, not crosswalks or other signs.
-- It is tuned for forward-facing city driving.
 
 ## Built with
 
 - [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) for detection and tracking
 - [Depth Anything V2](https://github.com/DepthAnything/Depth-Anything-V2) for distance from one camera
-- [OpenCV](https://opencv.org/) for reading and drawing on the video
