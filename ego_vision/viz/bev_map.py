@@ -13,6 +13,7 @@ from ego_vision.config.settings import (
     GROUP_COLORS,
     GROUP_VEHICLE,
     GROUP_VRU,
+    GROUP_OBSTACLE,
 )
 from ego_vision.viz.common import _translucent_panel, scale
 
@@ -26,12 +27,12 @@ def draw_bev(frame, detections, panel_size=None, max_range_m=BEV_MAX_RANGE_M):
         panel_size = int(250 * s)
     margin = int(16 * s)
     frame_h, frame_w = frame.shape[:2]
-    x0, y0 = margin, margin
+    x0, y0 = margin, int(90 * max(1., frame_w / 960))
     x1, y1 = x0 + panel_size, y0 + panel_size
 
     _translucent_panel(frame, (x0, y0), (x1, y1), alpha=0.7, border=True)
 
-    cv2.putText(frame, "BEV", (x0 + int(12 * s), y0 + int(24 * s)),
+    cv2.putText(frame, "Approx. view", (x0 + int(12 * s), y0 + int(24 * s)),
                 FONT, 0.6 * s, (200, 200, 200), 1, cv2.LINE_AA)
 
     # leave room at top for title and at bottom for ego marker.
@@ -56,7 +57,7 @@ def draw_bev(frame, detections, panel_size=None, max_range_m=BEV_MAX_RANGE_M):
     for d in detections:
         if d.distance_m is None or d.distance_m > max_range_m:
             continue
-        if d.class_group not in (GROUP_VEHICLE, GROUP_VRU):
+        if d.class_group not in (GROUP_VEHICLE, GROUP_VRU, GROUP_OBSTACLE):
             continue
 
         bbox_cx = (d.box_xyxy[0] + d.box_xyxy[2]) / 2.0

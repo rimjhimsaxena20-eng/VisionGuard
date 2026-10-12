@@ -1,6 +1,12 @@
-opencv-python
-ultralytics
-transformers
-moviepy
-scikit-image
-scikit-learn
+# Python 3.11. Install the chosen Torch wheel pair from README first.
+torch==2.8.0
+torchvision==0.23.0
+numpy==1.26.4
+opencv-python==4.11.0.86
+ultralytics==8.3.203
+transformers==4.57.1
+Pillow==11.3.0
+lap==0.5.12
+pyttsx3==2.99
+comtypes==1.4.12; sys_platform == 'win32'
+pywin32==311; sys_platform == 'win32'

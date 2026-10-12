@@ -21,6 +21,14 @@ class Detection:
     light_state: str | None = None
     distance_m: float | None = None
     ttc_sec: float | None = None
+    distance_timestamp: float | None = None
+    depth_fresh: bool = False
+    distance_age: float | None = None
+    depth_uncertainty: float | None = None
+    closing_mps: float | None = None
+    ttc_valid: bool = False
+    estimate_age: float | None = None
+    ttc_status: str = "insufficient history"
 
 
 class YoloDetector:
@@ -30,7 +38,7 @@ class YoloDetector:
         conf=DEFAULT_CONF,
         iou=DEFAULT_IOU,
         device=None,
-        track=False,
+        track=True,
     ):
         from ultralytics import YOLO
 

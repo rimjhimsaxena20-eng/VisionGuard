@@ -14,11 +14,13 @@ import cv2
 
 class InferenceResizer:
     def __init__(self, native_w, native_h, target_width):
+        if native_w <= 0 or native_h <= 0 or target_width < 0:
+            raise ValueError("Dimensions must be positive and resize width nonnegative")
         self.native_w = native_w
         self.native_h = native_h
         if target_width and target_width < native_w:
             self.infer_w = target_width
-            self.infer_h = int(round(native_h * (target_width / native_w)))
+            self.infer_h = max(1, int(round(native_h * (target_width / native_w))))
         else:
             self.infer_w, self.infer_h = native_w, native_h
         self.scale_x = native_w / self.infer_w

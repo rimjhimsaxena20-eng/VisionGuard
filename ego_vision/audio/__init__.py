@@ -1,0 +1,1 @@
+"""Local, cancellable warning speech."""

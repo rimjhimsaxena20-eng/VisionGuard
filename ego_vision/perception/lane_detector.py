@@ -168,4 +168,5 @@ def process_video():
     cv2.destroyAllWindows()
 
 # Run the video processing function
-process_video()
+if __name__ == "__main__":
+    process_video()

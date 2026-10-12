@@ -1,0 +1,50 @@
+test_deescalation_is_silent_and_persistent (test_core.DecisionTests.test_deescalation_is_silent_and_persistent) ... ok
+test_emergency_bypasses_persistence (test_core.DecisionTests.test_emergency_bypasses_persistence) ... ok
+test_lost_observations_cancel_movement_immediately (test_core.DecisionTests.test_lost_observations_cancel_movement_immediately) ... ok
+test_side_switch_waits_at_stop (test_core.DecisionTests.test_side_switch_waits_at_stop) ... ok
+test_inset_avoids_background_at_bottom (test_core.DepthTests.test_inset_avoids_background_at_bottom) ... ok
+test_invalid_pixels_and_clipped_boxes (test_core.DepthTests.test_invalid_pixels_and_clipped_boxes) ... ok
+test_matched_depth_timestamp_and_uncertainty (test_core.DepthTests.test_matched_depth_timestamp_and_uncertainty) ... ok
+test_beside_path_suppressed (test_core.GeometryRiskTests.test_beside_path_suppressed) ... ok
+test_both_sides_blocked (test_core.GeometryRiskTests.test_both_sides_blocked) ... ok
+test_crossing_before_corridor_entry (test_core.GeometryRiskTests.test_crossing_before_corridor_entry) ... ok
+test_immediate_proximity_beside_path (test_core.GeometryRiskTests.test_immediate_proximity_beside_path) ... ok
+test_left_blocked_prevents_left (test_core.GeometryRiskTests.test_left_blocked_prevents_left) ... ok
+test_no_depth_is_unknown_stop (test_core.GeometryRiskTests.test_no_depth_is_unknown_stop) ... ok
+test_resolution_invariance (test_core.GeometryRiskTests.test_resolution_invariance) ... ok
+test_stationary_chair_in_path (test_core.GeometryRiskTests.test_stationary_chair_in_path) ... ok
+test_undetected_but_near_side_depth_blocks (test_core.GeometryRiskTests.test_undetected_but_near_side_depth_blocks) ... ok
+test_unstable_motion_forbids_direction (test_core.GeometryRiskTests.test_unstable_motion_forbids_direction) ... ok
+test_upper_image_is_not_ground_obstacle (test_core.GeometryRiskTests.test_upper_image_is_not_ground_obstacle) ... ok
+test_wide_footprint_overlap (test_core.GeometryRiskTests.test_wide_footprint_overlap) ... ok
+test_csv_reports_unknown_as_empty (test_core.InputLogTests.test_csv_reports_unknown_as_empty) ... ok
+test_invalid_cli_values_rejected (test_core.InputLogTests.test_invalid_cli_values_rejected) ... ok
+test_numeric_camera_and_file_paths (test_core.InputLogTests.test_numeric_camera_and_file_paths) ... ok
+test_pts_then_fps_fallback_stays_monotonic (test_core.InputLogTests.test_pts_then_fps_fallback_stays_monotonic) ... ok
+test_active_warning_expires_without_inference_heartbeat (test_core.SpeechTests.test_active_warning_expires_without_inference_heartbeat) ... ok
+test_cooldown_and_escalation (test_core.SpeechTests.test_cooldown_and_escalation) ... ok
+test_expired_speech_discarded (test_core.SpeechTests.test_expired_speech_discarded) ... ok
+test_obsolete_speech_discarded (test_core.SpeechTests.test_obsolete_speech_discarded) ... ok
+test_urgent_event_replaces_pending_and_active (test_core.SpeechTests.test_urgent_event_replaces_pending_and_active) ... ok
+test_approaching (test_core.TtcTests.test_approaching) ... ok
+test_cached_depth_does_not_create_observation (test_core.TtcTests.test_cached_depth_does_not_create_observation) ... ok
+test_clock_reversal_resets_history (test_core.TtcTests.test_clock_reversal_resets_history) ... ok
+test_duplicate_timestamp_cannot_mutate_history (test_core.TtcTests.test_duplicate_timestamp_cannot_mutate_history) ... ok
+test_expiry_staleness_long_gap_and_jump (test_core.TtcTests.test_expiry_staleness_long_gap_and_jump) ... ok
+test_invalid_depth_clears_old_ttc (test_core.TtcTests.test_invalid_depth_clears_old_ttc) ... ok
+test_irregular_elapsed_measurement_time (test_core.TtcTests.test_irregular_elapsed_measurement_time) ... ok
+test_new_untracked_object_cannot_inherit_ttc (test_core.TtcTests.test_new_untracked_object_cannot_inherit_ttc) ... ok
+test_receding_clears_reused_detection (test_core.TtcTests.test_receding_clears_reused_detection) ... ok
+test_stationary_noise (test_core.TtcTests.test_stationary_noise) ... ok
+test_core_modules_import_without_optional_model_libraries (test_integration.IntegrationTests.test_core_modules_import_without_optional_model_libraries) ... ok
+test_measurement_to_emergency_action_and_recession (test_integration.IntegrationTests.test_measurement_to_emergency_action_and_recession) ... ok
+test_shifted_box_does_not_sample_cached_map (test_integration.IntegrationTests.test_shifted_box_does_not_sample_cached_map) ... ok
+test_unstable_image_motion_invalidates_ttc (test_integration.IntegrationTests.test_unstable_image_motion_invalidates_ttc) ... ok
+test_native_driver_failure_falls_back (test_integration.SpeechWorkerTests.test_native_driver_failure_falls_back) ... ok
+test_worker_cancels_without_new_inference_frame (test_integration.SpeechWorkerTests.test_worker_cancels_without_new_inference_frame) ... ok
+test_worker_owns_engine_and_cancels_on_source_failure (test_integration.SpeechWorkerTests.test_worker_owns_engine_and_cancels_on_source_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 45 tests in 0.288s
+
+OK

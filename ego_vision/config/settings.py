@@ -1,127 +1,43 @@
-"""config"""
-
-DEFAULT_MODEL = "yolo11m.pt"
+"""VisionGuard defaults. Thresholds are demonstration heuristics, not probabilities."""
+DEFAULT_MODEL = "yolo11n.pt"
 DEFAULT_CONF = 0.30
 DEFAULT_IOU = 0.50
-
-VEHICLE_CLASSES = frozenset({
-    "car", "truck", "bus", "motorcycle", "bicycle", "train",
-})
-
-# Vulnerable Road Users VRUs like people or animals. 
-VRU_CLASSES = frozenset({
-    "person", "dog", "cat", "horse"
-})
-
-CONTROL_CLASSES = frozenset({
-    "traffic light", "stop sign",
-})
-
-# Detectable on COCO but removed from detection for the HUD to reduce clutter.
-IGNORED_CLASSES = frozenset({
-    "fire hydrant", "parking meter", "bench",
-})
-
-ROAD_CLASSES = VEHICLE_CLASSES | VRU_CLASSES | CONTROL_CLASSES
-
-GROUP_VEHICLE = "vehicle"
-GROUP_VRU = "vru"
-GROUP_CONTROL = "control"
+VEHICLE_CLASSES = frozenset({"car", "truck", "bus", "motorcycle", "bicycle", "train"})
+VRU_CLASSES = frozenset({"person", "dog", "cat", "horse"})
+OBSTACLE_CLASSES = frozenset({"chair", "bench", "fire hydrant", "suitcase"})
+ROAD_CLASSES = VEHICLE_CLASSES | VRU_CLASSES | OBSTACLE_CLASSES
+GROUP_VEHICLE, GROUP_VRU, GROUP_OBSTACLE = "vehicle", "vru", "obstacle"
+GROUP_CONTROL = "control"  # Legacy experimental speed module only; never enabled.
+GROUP_COLORS = {GROUP_VEHICLE: (0, 200, 255), GROUP_VRU: (0, 160, 255),
+                GROUP_OBSTACLE: (220, 170, 80)}
 
 
-def class_group(class_name: str) -> str | None:
-    if class_name in VEHICLE_CLASSES:
+def class_group(name):
+    if name in VEHICLE_CLASSES:
         return GROUP_VEHICLE
-    if class_name in VRU_CLASSES:
+    if name in VRU_CLASSES:
         return GROUP_VRU
-    if class_name in CONTROL_CLASSES:
-        return GROUP_CONTROL
+    if name in OBSTACLE_CLASSES:
+        return GROUP_OBSTACLE
     return None
 
 
-# BGR (OpenCV order).
-GROUP_COLORS: dict[str, tuple[int, int, int]] = {
-    GROUP_VEHICLE: (0, 200, 255),    # amber, most common class group
-    GROUP_VRU:     (0, 80, 255),     # red-orange, highest attention
-    GROUP_CONTROL: (0, 255, 120),    # green, signals/signs
-}
-
-# Traffic light state colors (BGR).
-# Used when a light's color has been classified; overrides the
-# generic CONTROL color on that one box.
-LIGHT_COLORS: dict[str, tuple[int, int, int]] = {
-    "red": (0, 0, 255),
-    "yellow": (0, 220, 255),
-    "green": (0, 200, 0),
-    "unknown": (180, 180, 180),
-}
-
-# ---------------------------------------------------------------------------
-# Reasoning / decision layer
-# ---------------------------------------------------------------------------
-
-# Ego zone is a symmetric trapezoid in front of the car,
-# built from four scalars (all normalized).
-#
-#                center
-#                  |
-#       top_y  +---+---+         (top edge)
-#              |       |
-#              |       |
-#         1.0  +-------+         (bottom edge, at the camera)
-#              |<----->|         width = bottom_width (fraction of frame width)
-EGO_ZONE_CENTER       = 0.50  # vanishing-point x as fraction of width
-EGO_ZONE_BOTTOM_WIDTH = 0.32  # bottom edge width as fraction of frame width
-EGO_ZONE_TOP_WIDTH    = 0.06  # top edge width
-EGO_ZONE_TOP_Y        = 0.78  # y of the top edge (smaller = reaches higher)
-
-# Outside-but-within this many pixels of the zone counts as "near".
-EGO_NEAR_MARGIN_PX = 80
-
-# Lead-vehicle thresholds in meters.
-LEAD_STOP_DISTANCE_M  = 10.0   # <= this and in ego zone -> STOP
-LEAD_YIELD_DISTANCE_M = 40.0   # <= this and in ego zone -> YIELD
-
-# Emergency brake: any in-zone object with TTC below this triggers it.
-EMERGENCY_TTC_SEC = 2.0
-
-# Hysteresis: a new action must hold for N consecutive proposals to commit.
-HYSTERESIS_N = 5
-
-# ---------------------------------------------------------------------------
-# Depth estimation
-# ---------------------------------------------------------------------------
-# Metric (real-meter) outdoor model. Distances are in meters, max ~80m.
 DEPTH_MODEL = "depth-anything/Depth-Anything-V2-Metric-Outdoor-Small-hf"
+INDOOR_DEPTH_MODEL = "depth-anything/Depth-Anything-V2-Metric-Indoor-Small-hf"
+DEPTH_SCALE = 1.0  # Multiply predictions by known_distance / predicted_distance.
 DEPTH_MAX_M = 80.0
-
-# Per-camera calibration factor for depth readings. The model is trained on
-# KITTI camera intrinsics, so values may need a multiplicative correction on
-# different cameras. Tune by eyeballing a known-distance object: take what
-# the model reports, divide by the actual distance. Applied to every depth
-# sample downstream.
-#   1.0  = no correction (use when first measuring)
-#   0.35 = typical when the raw readings come out roughly 3x too far
-DEPTH_SCALE = 0.35
-
-# BEV lateral conversion factor: (norm_x - 0.5) * BEV_LATERAL_SCALE * distance_m
-# gives lateral position in meters. Default 1.15 assumes ~60 deg horizontal
-# FOV (typical dashcam). Tune per camera if dots land off-center.
-BEV_LATERAL_SCALE = 1.15
-BEV_MAX_RANGE_M = 50.0
-
-# Overlay scaling: every viz function computes
-#   s = frame.shape[1] / OVERLAY_REFERENCE_WIDTH
-# and multiplies all pixel/font constants by s. Increasing this value
-# shrinks every overlay proportionally; decreasing it grows them.
-OVERLAY_REFERENCE_WIDTH = 2400
-
-
-ACTION_COLORS_BGR: dict[str, tuple[int, int, int]] = {
-    "STOP":            (0,   0, 200),
-    "EMERGENCY BRAKE": (0,   0, 255),
-    "BRAKE":           (0,  60, 220),
-    "YIELD":           (0, 200, 220),
-    "SLOW DOWN":       (0, 200, 220),
-    "GO":              (0, 180,  60),
-}
+MAX_DEPTH_AGE = 1.0
+MAX_LIVE_AGE = 1.5
+HYSTERESIS_N = 3
+EGO_ZONE_CENTER = 0.5
+EGO_ZONE_BOTTOM_WIDTH = 0.32
+EGO_ZONE_TOP_WIDTH = 0.10
+EGO_ZONE_TOP_Y = 0.50
+PREDICTION_HORIZON = 1.2
+FOOTPRINT_MARGIN = 0.025
+BEV_LATERAL_SCALE = 1.15  # Illustrative FOV assumption only.
+BEV_MAX_RANGE_M = 10.0
+OVERLAY_REFERENCE_WIDTH = 960
+RISK_COLORS = {"LOW": (80, 190, 90), "UNKNOWN": (180, 180, 180),
+               "CAUTION": (0, 220, 240), "HIGH": (0, 140, 255),
+               "CRITICAL": (40, 40, 255)}

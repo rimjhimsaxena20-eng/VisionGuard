@@ -1,0 +1,2 @@
+# unittest is in the standard library; no models, GPU, or OpenCV required.
+numpy==1.26.4

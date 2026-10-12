@@ -11,7 +11,7 @@ def scale(frame):
     Every viz function multiplies its pixel/font constants by this so the
     layout reads the same on any frame size.
     """
-    return frame.shape[1] / OVERLAY_REFERENCE_WIDTH
+    return max(0.8, min(1.25, frame.shape[1] / OVERLAY_REFERENCE_WIDTH))
 
 
 def _translucent_panel(frame, p1, p2, alpha=0.7, border=True):
